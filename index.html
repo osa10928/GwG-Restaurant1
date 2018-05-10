@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <link rel="stylesheet" href="css/styles.css">
+  <title>Restaurant Reviews</title>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1><a href="/">Restaurant Reviews</a></h1>
+    </nav>
+  </header>
+
+  <main id="maincontent">
+    <section id="map-container">
+      <a id="skip-map" href="#neighborhoods-select">Skip Google Map?</a>
+      <div id="map"></div>
+    </section>
+    <section id="filter-container">
+      <div class="filter-options">
+        <h2>Filter Neighborhood Results</h2>
+        <div id="neighborhoods-select-header">Filter Results by Neighborhood</div>
+        <select id="neighborhoods-select" name="neighborhoods" aria-labelledby="neighborhoods-select-header" onchange="updateRestaurants()">
+          <option value="all">All Neighborhoods</option>
+        </select>
+        <div id="cuisine-select-header">Filter Results by Cuisine</div>
+        <select id="cuisines-select" name="cuisines" aria-labelledby="cuisine-select-header" onchange="updateRestaurants()">
+          <option value="all">All Cuisines</option>
+        </select>
+      </div>
+    </section>
+    <section id=info-container>
+      <ul id="restaurants-list"></ul>
+    </section>
+  </main>
+
+  <noscript>
+    <h1>You don’t have Javascript enabled.</h1>
+    <p>Please enable Javascript to get the full experience.</p>
+  </noscript>
+  <script type="application/javascript" src="js/sw-controller.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"></script>
+
+
+  <footer id="footer">
+    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+  </footer>
+
+</body>
+
+</html>

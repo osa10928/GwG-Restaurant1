@@ -1,0 +1,24 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "sample application which I'll make into a PWA",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udacity/mws-restaurant-stage-1.git"
+  },
+  "author": "stephen agwu (with udacity)",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-mkdir": "^1.0.0",
+    "http-server": "^0.11.1"
+  },
+  "dependencies": {
+    "grunt-responsive-images": "^1.10.1"
+  }
+}
