@@ -11,6 +11,8 @@ var watchify = require('watchify');
 var uglify = require('gulp-uglify');
 var del = require('del');
 var cleanCSS = require('gulp-clean-css');
+var imagemin = require('gulp-imagemin');
+var imageResize = require('gulp-image-resize');
 
 gulp.task('clean', function(done) {
 	del(['build'], done)
@@ -126,6 +128,35 @@ gulp.task('manifest', function() {
 	.pipe(gulp.dest('./build/'))
 })
 
+gulp.task('compress-medium', function() {
+	gulp.src(['img/*', '!img/icons/'])
+	  .pipe(imagemin())
+	  .pipe(rename(function(path) {
+	  	path.basename += "-800medium"
+	  }))
+	  .pipe(gulp.dest('./build/images/'))
+})
+
+gulp.task('compress-small', function() {
+	gulp.src(['img/*', '!img/icons/'])
+	  .pipe(imagemin())
+	  .pipe(imageResize({
+	  	imageMagick: true,
+	  	width: 350
+	  }))
+	  .pipe(rename(function(path) {
+	  	path.basename += "-350small"
+	  }))
+	  .pipe(gulp.dest('./build/images/'))
+})
+
+gulp.task('icons', function() {
+	gulp.src('img/icons/*')
+	  .pipe(gulp.dest('./build/images/icons'))
+})
+
+gulp.task('images', ['compress-small', 'compress-medium', 'icons'])
+
 gulp.task('watch', function() {
 	gulp.watch('./js/**/*.js', ['bundle']);
 	gulp.watch('*.html', ['html']);
@@ -135,6 +166,6 @@ gulp.task('watch', function() {
 })
 
 
-gulp.task('default', ['bundle', 'mainjs', 'sw', 'minify-css', 'html', 'manifest', 'watch'])
+gulp.task('default', ['bundle', 'mainjs', 'sw', 'minify-css', 'html', 'manifest', 'images', 'watch'])
 
-gulp.task('prod', ['prodBundle', 'mainjs', 'prodSw', 'minify-css', 'html', 'manifest'])
+gulp.task('prod', ['prodBundle', 'mainjs', 'prodSw', 'minify-css', 'html', 'images', 'manifest'])
