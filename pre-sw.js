@@ -28,7 +28,6 @@ var files = [
 	'images/8-800medium.jpg',
 	'images/9-800medium.jpg',
 	'images/10-800medium.jpg',
-	'images/stockImg.png',
 ]
 
 self.addEventListener('install', function(event) {
