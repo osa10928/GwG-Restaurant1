@@ -4,7 +4,7 @@
   "description": "sample application which I'll make into a PWA",
   "main": "index.js",
   "scripts": {
-    "start": "http-server -p 8000"
+    "start": "http-server './build/' -p 8000 -g"
   },
   "repository": {
     "type": "git",
@@ -13,12 +13,28 @@
   "author": "stephen agwu (with udacity)",
   "license": "ISC",
   "devDependencies": {
-    "grunt": "^1.0.2",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-mkdir": "^1.0.0",
-    "http-server": "^0.11.1"
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^8.0.0",
+    "buffer": "^5.1.0",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-rename": "^1.2.3",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "http-server": "^0.11.1",
+    "idb": "^2.1.1",
+    "merge": "^1.2.0",
+    "source": "0.0.3",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.0"
   },
   "dependencies": {
-    "grunt-responsive-images": "^1.10.1"
+    "compression-zlib": "^2.6.0",
+    "express": "^4.16.3",
+    "intersection-observer": "^0.5.0"
   }
 }

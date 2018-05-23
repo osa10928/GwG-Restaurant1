@@ -12,7 +12,6 @@ body,td,th,p{
 	line-height: 1.5;
 }
 body {
-	background-color: #fdfdfd;
 	margin: 0;
 	position:relative;
   width: 100%;
@@ -353,6 +352,14 @@ nav h1 a {
 #restaurant-hours td[data-td="timesOpen"] {
   width: 75%;
   word-wrap: 
+}
+
+/* ========== Utility Classes ==========*/
+
+.img-responsive {
+  width: 100%;
+  min-width: 150px;
+  height: auto;
 }
 
 
