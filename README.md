@@ -17,7 +17,7 @@ Furthermore, this Application uses a GoogleMaps Javascript API. In order to get 
 This application is fairly basic and therefore easy to get up and running:
 1. Clone repository
 2. Visit the stage1 version of this application by going to the stage1 branch. Run `git checkout stage1`.
-3. On the last `script` tag of the `index.html` and the `restaurant.html` pages be sure to replace the 'YOUR_API_KEY' portions of the src attribute witht the google maps API key given to you by Google.
+3. On the last `script` tag of the `index.html` and the `restaurant.html` pages be sure to replace the 'YOUR_API_KEY' portions of the src attribute with the google maps API key given to you by Google.
 4. In console, enter the directory and run `npm install`
 5. Run `grunt`
 6. Run `npm run start` to start a localhost server on port 8080
@@ -25,8 +25,7 @@ This application is fairly basic and therefore easy to get up and running:
 
 
 ## Part II
-The goal of this stage of the assignment is to turn the application into a complete Progressive Web Application. This involved getting the application to rate above a 90% in Google Chromes Lighthouse (which audits websites/applications based on numerous categories). This mark is achieved if we disregard how the rating is affected by the Google Maps API. 
-While Front End build tools weren’t explicitly required, I benefited greatly from using one in particular: Gulp. This application also leverages several optimizations such as image, Javascript and CSS compressions, lazy-loaded images, and data storage using the browser's index database.
+The goal of this stage of the assignment is to turn the application into a complete Front End Progressive Web Application. The involved getting the data from a remote serve instead of from a json file. The next step was getting the application to rate above a 90% in Google Chromes Lighthouse for Progressive Web applications. This mark is achieved if we disregard the how the rating is affected by the Google Maps API. While it was not explicitly required, this step was also made vastly easier and faster by utilizing Front End development automation tools, in this case, Gulp. This application also leverages several optimizations such as image, Javascript and CSS compressions, lazy-loaded images, serving gzip files and data storage using the browser's index database.
 
 ### Requirements
 The requirements for this stage of the project are the same as those of the first, namely, node, npm, and imagemagick:
@@ -37,19 +36,22 @@ The requirements for this stage of the project are the same as those of the firs
 The Google Maps API code is still required as well ([google's developer console](https://console.developers.google.com/project?pli=1)).
 
 ### Running Application
-This application is fairly basic and therefore easy to get up and running:
-1. Clone repository
-2. On the last `script` tag of the `index.html` and the `restaurant.html` pages be sure to replace the 'YOUR_API_KEY' portions of the src attribute with the google maps API key given to you by Google.
-3. In console, enter the directory and run `npm install`
-4. Run `gulp prod` to generate the production build of this application. If you want to run this in development simply run `gulp`.
-5. Run `npm run start` to start a localhost server on port 8080
-6. Navigate to localhost:8080 in your browser and explore.
-7. If your in chrome download the lighthouse plugin in. Then open devtools and run an audit.
-8. If you want to delete the build folder and return the application to original state run `gulp clean` in the terminal.
+This application involves running BackEnd server to serve data to the this repositories FrontEnd application. The steps are as follows:
+1. Clone [server repository](https://github.com/udacity/mws-restaurant-stage-2).
+2. Follow steps server repository README page to get the server up and running.
+3. From another terminal window clone this repository.
+4. On the last `script` tag of the `index.html` and the `restaurant.html` pages be sure to replace the 'YOUR_API_KEY' portions of the src attribute with the google maps API key given to you by Google.
+5. In console, enter the directory and run `npm install`
+6. Run `gulp prod` to generate the production build of this application. If you want to run this in development simply run `gulp`.
+7. Run `npm run start` to start a localhost server on port 8080
+8. Navigate to localhost:8080 in your browser and explore.
+9. If your in chrome download the lighthouse plugin in. Then open devtools and run an audit.
+10. If you want to delete the build folder and return the application to original state run `gulp clean` in the terminal.
 
 ### Google Maps API
 As mentioned before, the call to the google maps api severely decreases performance and causes the Progressive Web Application rating to decrease as well. This is because Google is delivering several images (which are not next gen images) that take time to render. Unfortunately this is not something that changed as the code and files coming from Google cannot be altered. To get a more accurate rating from Lighthouse about the code written in this repository simply comment out the `<script>` calls to google maps in both of the html files.
 
 #### Special Thanks
 I would like to send a thanks to Udacity and the Grow with Google team for giving me the opportunity to participate in their Scholarship program.
+
 
