@@ -43,7 +43,7 @@ This application involves running BackEnd server to serve data to the this repos
 4. On the last `script` tag of the `index.html` and the `restaurant.html` pages be sure to replace the 'YOUR_API_KEY' portions of the src attribute with the google maps API key given to you by Google.
 5. In console, enter the directory and run `npm install`
 6. Run `gulp prod` to generate the production build of this application. If you want to run this in development simply run `gulp`.
-7. Run `npm run start` to start a localhost server on port 8000
+7. Run `node server.js` to start a localhost server on port 8000
 8. Navigate to localhost:8000 in your browser and explore.
 9. If your in chrome download the lighthouse plugin in. Then open devtools and run an audit.
 10. If you want to delete the build folder and return the application to original state run `gulp clean` in the terminal.

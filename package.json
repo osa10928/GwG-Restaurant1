@@ -4,7 +4,7 @@
   "description": "sample application which I'll make into a PWA",
   "main": "index.js",
   "scripts": {
-    "start": "http-server './build/' -p 8000 -g"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
