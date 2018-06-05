@@ -12,6 +12,9 @@ var uglify = require('gulp-uglify');
 var del = require('del');
 var cleanCSS = require('gulp-clean-css');
 var imagemin = require('gulp-imagemin');
+var webp = require('gulp-webp');
+var clone = require('gulp-clone')
+var clonesink = clone.sink();
 var imageResize = require('gulp-image-resize');
 
 gulp.task('clean', function(done) {
@@ -129,7 +132,7 @@ gulp.task('manifest', function() {
 })
 
 gulp.task('compress-medium', function() {
-	gulp.src(['img/*', '!img/icons/'])
+	gulp.src(['img/*', '!img/icons/', '!img/stockIcon.jpg'])
 	  .pipe(imagemin())
 	  .pipe(rename(function(path) {
 	  	path.basename += "-800medium"
@@ -138,7 +141,7 @@ gulp.task('compress-medium', function() {
 })
 
 gulp.task('compress-small', function() {
-	gulp.src(['img/*', '!img/icons/'])
+	gulp.src(['img/*', '!img/icons/', '!img/stockIcon.jpg'])
 	  .pipe(imagemin())
 	  .pipe(imageResize({
 	  	imageMagick: true,
@@ -150,12 +153,18 @@ gulp.task('compress-small', function() {
 	  .pipe(gulp.dest('./build/images/'))
 })
 
+gulp.task('compress-stock', function() {
+	gulp.src('img/stockIcon.jpg')
+	.pipe(imagemin())
+	.pipe(gulp.dest('./build/images/'))
+})
+
 gulp.task('icons', function() {
 	gulp.src('img/icons/*')
 	  .pipe(gulp.dest('./build/images/icons'))
 })
 
-gulp.task('images', ['compress-small', 'compress-medium', 'icons'])
+gulp.task('images', ['compress-stock', 'compress-small', 'compress-medium', 'icons'])
 
 gulp.task('watch', function() {
 	gulp.watch('./js/**/*.js', ['bundle']);

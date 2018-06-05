@@ -139,18 +139,18 @@ export default class MainController {
 
     const source1 = document.createElement('source');
     source1.setAttribute('media', '(max-width:949px)')
-    source1.setAttribute('srcset', `//:0`);
+    source1.setAttribute('srcset', `images/stockIcon.jpg`);
     source1.setAttribute('data-srcset', `${srcPrefix}-800medium.jpg`);
 
     const source2 = document.createElement('source');
     source2.setAttribute('media', '(min-width:950px)')
-    source2.setAttribute('srcset', `//:0`);
+    source2.setAttribute('srcset', `images/stockIcon.jpg`);
     source2.setAttribute('data-srcset', `${srcPrefix}-350small.jpg 1x, ${srcPrefix}-800medium.jpg 2x`);
 
     const image = document.createElement('img');
     image.className += 'img-responsive';
     image.className += ' observed-img'
-    image.src = '//:0'
+    image.src = 'images/stockIcon.jpg'
     image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant));
     image.setAttribute('alt', `image of restaurant ${restaurant.name}`)
 
@@ -192,7 +192,7 @@ export default class MainController {
           let src2 = entry.target.parentElement.childNodes[1]
           img.setAttribute('src', img.getAttribute('data-src'))
           src1.setAttribute('srcset', src1.getAttribute('data-srcset'))
-          src2.setAttribute('srcset', src2.getAttribute('date-srcset'))
+          src2.setAttribute('srcset', src2.getAttribute('data-srcset'))
           observer.unobserve(entry.target)
         }
       })
@@ -209,7 +209,6 @@ export default class MainController {
    * Add markers for current restaurants to the map.
    */
   addMarkersToMap(restaurants = this.restaurants) {
-    console.log(restaurants)
     restaurants.forEach(restaurant => {
       // Add marker to the map
       const marker = DBHelper.mapMarkerForRestaurant(restaurant, window.map);

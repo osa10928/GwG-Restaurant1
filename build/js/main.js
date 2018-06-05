@@ -34,6 +34,7 @@ if (window.location.pathname == '/') {
       mainController.updateRestaurants()
       document.getElementById('neighborhoods-select').onchange=mainController.updateRestaurants
       document.getElementById('cuisines-select').onchange=mainController.updateRestaurants
+      document.getElementById('static-map').addEventListener('click', toggleMap)
   });
 
 } else {
@@ -57,4 +58,14 @@ if (window.location.pathname == '/') {
       }
     });
   }
+}
+
+
+function toggleMap(e) {
+  let staticMap = document.getElementById('static-map')
+  let map = document.getElementById('map')
+  let p = document.getElementById('static-map-p')
+  map.classList.toggle('hide')
+  staticMap.classList.toggle('hide')
+  p.classList.toggle('hide')
 }

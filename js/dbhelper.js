@@ -91,7 +91,6 @@ export default class DBHelper {
     // Fetch all restaurants
     DBHelper.fetchRestaurants().then(restaurants => {
       let results = restaurants
-      //console.log(results)
       if (cuisine != 'all') { // filter by cuisine
         results = results.filter(r => r.cuisine_type == cuisine);
       }
