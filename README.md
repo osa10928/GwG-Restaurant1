@@ -32,6 +32,7 @@ The requirements for this stage of the project are the same as those of the firs
 1. `node v9.4.0`
 2. `npm v6.0.0`
 3. `imagemagick v8.6`
+4. `gulp-cli v2.0.1`
 
 The Google Maps API code is still required as well ([google's developer console](https://console.developers.google.com/project?pli=1)).
 
