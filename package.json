@@ -2,7 +2,7 @@
   "name": "mws-restaurant-stage-1",
   "version": "1.0.0",
   "description": "sample application which I'll make into a PWA",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "node server.js"
   },

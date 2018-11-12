@@ -75,6 +75,7 @@ export default class MainController {
   updateRestaurants() {
     const cSelect = document.getElementById('cuisines-select');
     const nSelect = document.getElementById('neighborhoods-select');
+    const favoritesFilter = document.getElementById("filter-favorites-checkbox")
 
     const cIndex = cSelect.selectedIndex;
     const nIndex = nSelect.selectedIndex;
@@ -82,7 +83,9 @@ export default class MainController {
     const cuisine = cSelect[cIndex].value;
     const neighborhood = nSelect[nIndex].value;
 
-    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+    const isFilteredForFavorites = favoritesFilter.checked
+
+    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, isFilteredForFavorites, (error, restaurants) => {
       if (error) { // Got an error!
       } else {
         //console.log(this)
@@ -160,7 +163,20 @@ export default class MainController {
     li.append(picture);
 
     const name = document.createElement('h2');
-    name.innerHTML = restaurant.name;
+    name.innerHTML = `${restaurant.name}   `;
+
+    const favoriteStar = document.createElement("i")
+    favoriteStar.setAttribute("class", "fa fa-star")
+    if (restaurant.is_favorite==="false" || !restaurant.is_favorite) {
+      favoriteStar.classList.add("not-favorite")
+    }
+    favoriteStar.setAttribute("aria-hidden", "true")
+    restaurant.is_favorite ? favoriteStar.setAttribute("title",  "Unfavorite Restaurant") : favoriteStar.setAttribute("title",  "Favorite Restaurant")
+    favoriteStar.setAttribute("data-is_favorite", restaurant.is_favorite)
+    favoriteStar.setAttribute("data-restaurant_id", restaurant.id)
+    favoriteStar.addEventListener("click", this.toggleFavorite.bind(this), false)
+
+    name.appendChild(favoriteStar)
     li.append(name);
 
     const neighborhood = document.createElement('p');
@@ -218,4 +234,30 @@ export default class MainController {
       this.markers.push(marker);
     });
   }
+
+  toggleFavorite(e) {
+    const id = e.srcElement.dataset.restaurant_id
+    const is_favorite = e.srcElement.dataset.is_favorite !== "false"
+    
+    DBHelper.putFavorite(!is_favorite, id).then(data => {
+      setTimeout(() => {
+        this.toggleStarIcon(!is_favorite, e)
+      }, 60)
+      e.srcElement.setAttribute("data-is_favorite", `${!is_favorite}`)
+    }).catch(error => {
+      console.log(error)
+    })
+
+  }
+
+  toggleStarIcon(is_favorite, e) {
+    if (is_favorite) {
+      e.srcElement.classList.remove("not-favorite")
+      e.srcElement.title = "Unfavorite Restaurant?"
+    } else {
+      e.srcElement.classList.add("not-favorite")
+      e.srcElement.title = "Favorite Restaurant?"
+    }
+  }
+
 }

@@ -1,14 +1,7 @@
 /**
  * Common database helper functions.
  */
-
-let fetchedRestaurants = null
-
-function resetFetchedRestaurants() {
-  setTimeout(function() {
-   fetchedRestaurants = null 
-  }, 10000)
-}
+const port = 1337 // Change this to your server port
 
 export default class DBHelper {
 
@@ -18,13 +11,7 @@ export default class DBHelper {
    */
 
   static DATABASE_URL() {
-    const port = 1337 // Change this to your server port
-    if (fetchedRestaurants) {
-      return fetchedRestaurants
-    }
-    fetchedRestaurants = `http://localhost:${port}/restaurants`;
-    resetFetchedRestaurants()
-    return fetchedRestaurants
+    return `http://localhost:${port}/restaurants`;
   }
 
   /**
@@ -87,7 +74,7 @@ export default class DBHelper {
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
-  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+  static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, isFavoritesFiltered, callback) {
     // Fetch all restaurants
     DBHelper.fetchRestaurants().then(restaurants => {
       let results = restaurants
@@ -96,6 +83,9 @@ export default class DBHelper {
       }
       if (neighborhood != 'all') { // filter by neighborhood
         results = results.filter(r => r.neighborhood == neighborhood);
+      }
+      if (isFavoritesFiltered) {//filter by favorited restaurants
+        results = results.filter(r => r.is_favorite === "true")
       }
       callback(null, results);
     }).catch(error => {
@@ -135,11 +125,90 @@ export default class DBHelper {
     })
   }
 
+  static fetchReviews(restaurant_id) {
+    return fetch(DBHelper.urlForGetRestaurantReviews(restaurant_id)).then(response => {
+      return response.json()
+    }).catch(error => {
+      console.log(error)
+      return error
+    })
+  }
+
+  static postReview(review) {
+    return fetch(DBHelper.urlForPostRestaurantReview(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(review),
+    }).then(response => {
+      return response.json()
+    }).catch(e => {
+      alert("The server is currently unreachable, but review will be posted when it is online.")
+      console.log(e)
+    })
+  }
+
+  static editReview(review, review_id) {
+    return fetch(DBHelper.urlForEditRestaurantReview(review_id), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(review),
+    }).then(response => {
+      return response.json()
+    })
+  }
+
+  static deleteReview(review_id) {
+    return fetch(DBHelper.urlForDeleteRestaurantReview(review_id), {
+      method: "DELETE"
+    }).then(response => {
+      return response.json()
+    }).catch(error => {
+      return error
+    })
+  }
+
+  static putFavorite(is_favorite, restaurant_id) {
+    return fetch(DBHelper.urlForPutFavoriteRestaurant(is_favorite, restaurant_id), {
+      method: "PUT"
+    }).then(response => {
+      return response.json()
+    }).catch(error => {
+      return error
+    })
+  }
+
   /**
    * Restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
     return (`./restaurant.html?id=${restaurant.id}`);
+  }
+
+  /**
+   * Restaurant page Reviews URL.
+   */
+  static urlForGetRestaurantReviews(restaurant_id) {
+    return (`http://localhost:${port}/reviews/?restaurant_id=${restaurant_id}`);
+  }
+
+  static urlForPostRestaurantReview() {
+    return (`http://localhost:${port}/reviews/`)
+  }
+
+  static urlForEditRestaurantReview(review_id) {
+    return (`http://localhost:${port}/reviews/${review_id}`)
+  }
+
+  static urlForDeleteRestaurantReview(review_id) {
+    return (`http://localhost:${port}/reviews/${review_id}`)
+  }
+
+  static urlForPutFavoriteRestaurant(is_favorite, restaurant_id) {
+    return (`http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=${is_favorite}`)
   }
 
   /**

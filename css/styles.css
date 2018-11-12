@@ -37,6 +37,10 @@
   cursor: pointer;
 }
 
+#static-map-p {
+  cursor: pointer;
+}
+
 #skip-map {
   position: absolute;
   z-index: 100;
@@ -84,6 +88,24 @@
   margin: 10px;
   padding: 0 10px;
   width: 200px;
+}
+
+#filter-favorites-container {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 10px;
+  color: white;
+}
+
+#filter-favorites-container label {
+  width: 50%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+#filter-favorites-container input {
+  cursor: pointer;
 }
 
 #neighborhoods-select-header, #cuisine-select-header {
@@ -149,10 +171,7 @@
   top: 0;
   width: 100%;
 }
-.inside #map-container {
-  background: blue none repeat scroll 0 0;
-  width: 100%;
-}
+
 
 .inside #map {
   background-color: #ccc;
@@ -213,6 +232,11 @@
   letter-spacing: -1px;
   padding-bottom: 1pt;
 }
+
+#review-title {
+  font-size: 1.4rem;
+}
+
 #reviews-list {
   margin: 0;
   padding: 0;
@@ -222,15 +246,95 @@
 #reviews-list li {
   background-color: #fff;
     border: 2px solid #f3f3f3;
-  display: block;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
   list-style-type: none;
   margin: 0 auto 30px auto;
   overflow: hidden;
   padding: 20px;
   width: calc(100% - 80px);
 }
+
 #reviews-list li p {
   margin: 0 0 10px;
+}
+
+#review-form {
+  margin-bottom: 7%;
+}
+
+#add-review-option {
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+.form-group {
+  margin-bottom: 3%;
+}
+
+.review-text {
+  font-size: 1rem;
+  max-width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.review-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 7%;
+}
+
+.edit-delete-btn {
+  font-size: inherit;
+  margin: 0 3%;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #252831;
+  color: #fff;
+}
+
+.delete-btn {
+  background-color: #721b13;
+  color: #fff;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+}
+
+.cancel-post-btns {
+  width: 30%;
+  margin: 0 5%;
+  cursor: pointer;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #721b13;
+  border: 1px solid black;
+  font-size: 1rem;
+}
+
+.post-btn {
+  background-color: green;
+}
+
+label {
+  width: 30%;
+}
+
+input {
+  width: 70%;
+  font-size: 1rem;
 }
 
 #restaurant-hours {
@@ -260,6 +364,78 @@
 #restaurant-hours td[data-td="timesOpen"] {
   width: 75%;
   word-wrap: 
+}
+
+#modal-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.3);
+}
+
+#modal {
+  position: fixed;
+  width: 60vw;
+  height: 35vh;
+  top: calc(30vh + 30px);
+  left: 20vw;
+  background-color: white;
+  border-radius: 10px;
+  transition: all 300ms;
+  opacity: 0
+}
+
+#modal header {
+  background-color: #721b13;
+  color: white;
+  display: flex;
+  flex-wrap: nowrap;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#modal header h4 {
+  width: 85%;
+  text-align: center;
+  padding: 3% 7px;
+  margin: 0;
+}
+
+#modal header button {
+  width: 15%;
+  border-top-right-radius: 10px;
+  background-color: #252831;
+  color: white;
+  cursor: pointer;
+}
+
+#modal-content {
+  text-align: center;
+  padding: 3%;
+}
+
+.modal-btns {
+  margin: 3% 5% 0%;
+  font-size: 14px;
+  border-radius: 10px;
+  padding: 1% 3% 2%;
+  cursor: pointer;
+}
+
+#modal-cancel-btn {
+  background-color: #252831;
+  color: white;
+}
+
+.fa-star {
+  cursor: pointer;
+}
+
+#modal-delete-btn {
+  background-color: #721b13;
+  color: white;
 }
 
 /* ========= Media Queries ========== */

@@ -34,12 +34,17 @@ if (window.location.pathname == '/') {
       mainController.updateRestaurants()
       document.getElementById('neighborhoods-select').onchange=mainController.updateRestaurants
       document.getElementById('cuisines-select').onchange=mainController.updateRestaurants
-      document.getElementById('static-map').addEventListener('click', toggleMap)
+      document.getElementById('filter-favorites-checkbox').addEventListener("click", mainController.updateRestaurants.bind(mainController), false)
+      document.getElementById('static-map-p').addEventListener("click", toggleMap, false)
+      //setTimeout(() => {
+      //  toggleMap()
+      //}, 1000)
   });
 
 } else {
 
   let restaurantController = new RestaurantController()
+  let restaurant_id;
   /**
   * Initialize Google map, called from HTML.
   */
@@ -48,6 +53,7 @@ if (window.location.pathname == '/') {
       if (error) { // Got an error!
         console.error(error);
       } else {
+        restaurant_id = restaurant.id
         window.map = new google.maps.Map(document.getElementById('map'), {
           zoom: 16,
           center: restaurant.latlng,
@@ -55,11 +61,24 @@ if (window.location.pathname == '/') {
         });
         restaurantController.fillBreadcrumb();
         DBHelper.mapMarkerForRestaurant(restaurant, window.map);
+        restaurantController.getReviews(restaurant_id)
       }
     });
   }
-}
 
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('static-map-p').addEventListener("click", toggleMap, false)
+
+    //Submit Review
+    document.getElementById("review-form").addEventListener("submit", restaurantController.submitReview.bind(restaurantController), false)
+
+    //delete modal button listeners
+    document.getElementById("modal-cancel-btn").addEventListener("click", restaurantController.toggleDeleteModal, false)
+    document.getElementById("modal-cancel-x").addEventListener("click", restaurantController.toggleDeleteModal, false)
+    document.getElementById("modal-delete-btn").addEventListener("click", restaurantController.deleteReview.bind(restaurantController), false)
+  })
+
+}
 
 function toggleMap(e) {
   let staticMap = document.getElementById('static-map')

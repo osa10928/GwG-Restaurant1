@@ -61,6 +61,7 @@
       max-width: 700px;
       margin: 0 auto;
     }
+
     #footer {
       background-color: #3B3B3B;
       color: #aaa;
@@ -124,6 +125,10 @@
         text-decoration: none;
     }
 
+    .inside #map-container {
+      background: transparent;
+    }
+
     /* Add a color on mouse-over */
     #breadcrumb li a:hover {
         color: #01447e;
@@ -136,8 +141,39 @@
       height: auto;
     }
 
+    input:invalid {
+      border: 1px solid red;
+    }
+
+    input:valid {
+      border: 1px solid black;
+    }
+
+    /* Utility */
+
     .hide {
       display: none !important;
+    }
+
+    .showing {
+      display: block;
+    }
+
+    .hiding {
+      display: none;
+    }
+
+    .hide-modal {
+      display: none !important;
+    }
+
+    .show-modal {
+      opacity: 1 !important;
+    }
+
+    .not-favorite {
+      color: #eff0f1 !important;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
     }
 
   </style>
@@ -164,7 +200,12 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map" aria-label="application: Google Map" role="application"></div>
+      <a id="skip-map" href="#neighborhoods-select">Skip Google Map?</a>
+      <div id="static-map-container">
+        <p id="static-map-p" style="margin-bottom:0;text-align:center;">Click static map to make map dynamic</p>
+        <img id="static-map" class="img-responsive" aria-label="Static Google Map" src="https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&zoom=12&size=700x400&key=AIzaSyCOj-u6UafWfHSPQljbF__bB9bH4Z-h1wE">
+      </div>
+      <div id="map" class="hide" aria-label="application: Google Map" role="application"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
@@ -178,8 +219,39 @@
     <!-- end restaurant -->
     <!-- Beginning reviews -->
     <section id="reviews-container">
+      <h3 id="review-title">Reviews</h3>
+      <div id="add-review-option">Write Your Own Review!</div>
+      <form id="review-form">
+        <div class="form-group">
+          <label id="review-form-name" for="name">Name: </label>
+          <input aria-labelledby="review-form-name" class="form-value" name="name" type="text" id="review-name" required />
+        </div>
+        <div class="form-group">
+          <label id="review-rating" for="rating">Rating (1-10): </label>
+          <input aria-labelledby="review-rating" class="form-value" name="rating" required pattern="[1-9]|10" />
+        </div>
+        <div class="form-group">
+          <label id="form-review-comments-label" for="form-review-comments"></label>
+          <textarea id="form-review-comments" class="review-text form-value" name="form-review-comments" rows="7" cols="40" required></textarea>
+        </div>
+        <input type="submit" />
+      </form>
       <ul id="reviews-list"></ul>
     </section>
+    <div id="modal-container" class="hide-modal">
+      <div id="modal">
+        <header>
+          <h4>Delete Comment</h4>
+          <button id="modal-cancel-x">X</button>
+        </header>
+        <div id="modal-content">
+          <p>Are you sure you want to delete this comment?</p>
+          <div id="modal-btn-group">
+            <button id="modal-cancel-btn" class="modal-btns">Cancel</button>
+            <button id="modal-delete-btn" class="modal-btns">Delete</button>
+          </div>
+      </div>
+    </div>
     <!-- End reviews -->
   </main>
   <!-- End main -->
@@ -202,6 +274,7 @@
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOj-u6UafWfHSPQljbF__bB9bH4Z-h1wE&libraries=places&callback=initMap"></script>
   <link rel="stylesheet" href="css/styles.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- End scripts -->
 
 </body>

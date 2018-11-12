@@ -2,6 +2,7 @@ import DBHelper from './dbhelper';
 
 export default class RestaurantController {
   constructor() {
+    this.reviews
     this.restaurant
     this.map
     this.fetchRestaurantFromURL = this.fetchRestaurantFromURL.bind(this)
@@ -40,7 +41,19 @@ export default class RestaurantController {
    */
   fillRestaurantHTML(restaurant = this.restaurant) {
     const name = document.getElementById('restaurant-name');
-    name.innerHTML = restaurant.name;
+    name.innerHTML = `${restaurant.name}   `
+
+    const favoriteStar = document.createElement("i")
+    favoriteStar.setAttribute("class", "fa fa-star")
+    this.restaurant.is_favorite ? null : favoriteStar.classList.add("not-favorite")
+    favoriteStar.setAttribute("aria-hidden", "true")
+    this.restaurant.is_favorite ? favoriteStar.setAttribute("title",  "Unfavorite Restaurant") : favoriteStar.setAttribute("title",  "Favorite Restaurant")
+    favoriteStar.setAttribute("data-is_favorite", restaurant.is_favorite)
+    favoriteStar.setAttribute("data-restaurant_id", restaurant.id)
+    favoriteStar.addEventListener("click", this.toggleFavorite.bind(this), false)
+    
+    name.appendChild(favoriteStar)
+
 
     const address = document.getElementById('restaurant-address');
     address.innerHTML = restaurant.address;
@@ -78,8 +91,6 @@ export default class RestaurantController {
     if (restaurant.operating_hours) {
       this.fillRestaurantHoursHTML();
     }
-    // fill reviews
-    this.fillReviewsHTML();
   }
 
   /**
@@ -114,12 +125,9 @@ export default class RestaurantController {
   /**
    * Create all reviews HTML and add them to the webpage.
    */
-  fillReviewsHTML(reviews = this.restaurant.reviews) {
+  fillReviewsHTML(reviews) {
     const container = document.getElementById('reviews-container');
-    const title = document.createElement('h3');
-    title.innerHTML = 'Reviews';
-    container.appendChild(title);
-
+    
     if (!reviews) {
       const noReviews = document.createElement('p');
       noReviews.innerHTML = 'No reviews yet!';
@@ -127,32 +135,146 @@ export default class RestaurantController {
       return;
     }
     const ul = document.getElementById('reviews-list');
+    const ulClone = ul.cloneNode(false)
+    ul.remove()
+
     reviews.forEach(review => {
-      ul.appendChild(this.createReviewHTML(review));
+      ulClone.appendChild(this.createReviewHTML(review));
     });
-    container.appendChild(ul);
+    container.appendChild(ulClone);
   }
 
   /**
    * Create review HTML and add it to the webpage.
    */
   createReviewHTML(review) {
+
     const li = document.createElement('li');
+    li.setAttribute("data-review_id", review.id);
+    li.setAttribute("class", "review-container")
+
+    //Create Visible Review
+    const visibleReview = document.createElement('div')
+    visibleReview.setAttribute("class", "review showing")
+
     const name = document.createElement('p');
     name.innerHTML = review.name;
-    li.appendChild(name);
+    visibleReview.appendChild(name);
 
-    const date = document.createElement('p');
-    date.innerHTML = review.date;
-    li.appendChild(date);
+    if (review.createdAt) {
+      const date = document.createElement('p');
+      const dateOptions = {
+        "hour":"numeric", "minute":"numeric", "month":"short", "day":"numeric", "year":"numeric"
+      }
+      date.innerHTML = new Date(review.createdAt).toLocaleDateString('en-US', dateOptions)
+      visibleReview.appendChild(date);
+    }
 
     const rating = document.createElement('p');
     rating.innerHTML = `Rating: ${review.rating}`;
-    li.appendChild(rating);
+    visibleReview.appendChild(rating);
 
     const comments = document.createElement('p');
     comments.innerHTML = review.comments;
-    li.appendChild(comments);
+    visibleReview.appendChild(comments);
+
+    const editDeleteBtns = document.createElement('div')
+    editDeleteBtns.setAttribute("class", "review-btns")
+
+    const editBtn = document.createElement("button")
+    editBtn.setAttribute("class", "edit-delete-btn edit-btn")
+    editBtn.innerHTML = "Edit"
+    editBtn.addEventListener("click", this.toggleEditReview, false)
+    editDeleteBtns.appendChild(editBtn)
+
+    const deleteBtn = document.createElement("button")
+    deleteBtn.setAttribute("class", "edit-delete-btn delete-btn")
+    deleteBtn.innerHTML = "Delete"
+    deleteBtn.addEventListener("click", this.toggleDeleteModal, false)
+    deleteBtn.setAttribute("data-review_id", review.id)
+    editDeleteBtns.appendChild(deleteBtn)
+
+    visibleReview.appendChild(editDeleteBtns)
+
+    //Generate edit form
+    const reviewForm = document.createElement("form")
+    reviewForm.setAttribute("class", "hiding review-edit-form")
+    reviewForm.setAttribute("data-review_id", review.id)
+
+    const formGroupName = document.createElement("div")
+    formGroupName.setAttribute("class", "form-group")
+
+    const labelName = document.createElement("label")
+    labelName.setAttribute("for", "name")
+    labelName.innerHTML = "Name: "
+    formGroupName.appendChild(labelName)
+
+    const inputName = document.createElement("input")
+    inputName.setAttribute("class", "form-value")
+    inputName.setAttribute("name", "name")
+    inputName.setAttribute("required", "")
+    inputName.setAttribute("value", review.name)
+
+    formGroupName.appendChild(inputName)
+    reviewForm.appendChild(formGroupName)
+
+
+    const formGroupRating = document.createElement("div")
+    formGroupRating.setAttribute("class", "form-group")
+
+    const labelRating = document.createElement("label")
+    labelRating.setAttribute("for", "rating")
+    labelRating.innerHTML = "Rating: "
+    formGroupRating.appendChild(labelRating)
+
+    const inputRating = document.createElement("input")
+    inputRating.setAttribute("class", "form-value")
+    inputRating.setAttribute("name", "rating")
+    inputRating.setAttribute("required", "")
+    inputRating.setAttribute("pattern", "[1-9]|10")
+    inputRating.setAttribute("value", review.rating)
+
+    formGroupRating.appendChild(inputRating)
+    reviewForm.appendChild(formGroupRating)
+
+
+    const formGroupComment = document.createElement("div")
+    formGroupComment.setAttribute("class", "form-group")
+
+    const labelComment = document.createElement("label")
+    labelComment.setAttribute("for", "comments")
+    formGroupComment.appendChild(labelComment)
+
+    const textareaComment = document.createElement("textarea")
+    textareaComment.setAttribute("class", "review-text form-value")
+    textareaComment.setAttribute("name", "comments")
+    textareaComment.setAttribute("cols", "40")
+    textareaComment.setAttribute("rows", "7")
+    textareaComment.innerHTML = review.comments
+
+    formGroupComment.appendChild(textareaComment)
+    reviewForm.appendChild(formGroupComment)
+
+    const formGroupButtons = document.createElement("div")
+    formGroupButtons.setAttribute("class", "form-group btn-group")
+
+    const cancelInput = document.createElement("input")
+    cancelInput.setAttribute("type", "button")
+    cancelInput.setAttribute("class", "cancel-post-btns cancel-btn")
+    cancelInput.setAttribute("value", "Cancel")
+    cancelInput.addEventListener("click", this.toggleEditReview, false)
+    formGroupButtons.appendChild(cancelInput)
+
+    const postInput = document.createElement("input")
+    postInput.setAttribute("type", "submit")
+    postInput.setAttribute("class", "cancel-post-btns post-btn")
+    formGroupButtons.appendChild(postInput)
+
+    reviewForm.appendChild(formGroupButtons)
+    reviewForm.addEventListener("submit", this.editReview.bind(this), false)
+
+    li.appendChild(visibleReview)
+    li.appendChild(reviewForm)
 
     return li;
   }
@@ -183,4 +305,146 @@ export default class RestaurantController {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
+  /**
+  * For Stage 3. Get Reviews and Post Reviews
+  */
+
+  getReviews(restaurant_id) {
+    DBHelper.fetchReviews(restaurant_id).then(reviews => {
+      this.fillReviewsHTML(reviews)
+    }).catch(error => {
+      console.log(error)
+      reject()
+    })
+  }
+
+  submitReview(e) {
+    e.preventDefault()
+    const parsedReview = this.parseReview(e)
+
+    DBHelper.postReview(parsedReview).then(data => {
+      this.clearReview(e)
+      this.getReviews(this.restaurant.id)
+      this.viewRecentReview()
+    }).catch(error => {
+        console.log(error)
+    })
+
+  }
+
+  editReview(e) {
+    e.preventDefault()
+    const parsedReview = this.parseReview(e, true)
+    const review_id = e.srcElement.dataset.review_id
+
+    DBHelper.editReview(parsedReview, review_id).then(data => {
+        this.getReviews(this.restaurant.id)
+      }).catch(error => {
+        console.log(error)
+    })
+  }
+
+  deleteReview(e) {
+    const review_id = e.srcElement.dataset.review_id
+
+    DBHelper.deleteReview(review_id).then(data => {
+      this.toggleDeleteModal()
+      this.getReviews(this.restaurant.id)
+    }).catch(error => {
+      console.log(error)
+    })
+    
+  }
+
+  toggleFavorite(e) {
+    const id = e.srcElement.dataset.restaurant_id
+    const is_favorite = e.srcElement.dataset.is_favorite !== "false"
+    
+    DBHelper.putFavorite(!is_favorite, id).then(data => {
+      setTimeout(() => {
+        this.toggleStarIcon(!is_favorite, e)
+      }, 60)
+      e.srcElement.setAttribute("data-is_favorite", `${!is_favorite}`)
+    }).catch(error => {
+      console.log(error)
+    })
+
+  }
+
+  toggleStarIcon(is_favorite, e) {
+    if (is_favorite) {
+      e.srcElement.classList.remove("not-favorite")
+      e.srcElement.title = "Unfavorite Restaurant?"
+    } else {
+      e.srcElement.classList.add("not-favorite")
+      e.srcElement.title = "Favorite Restaurant?"
+    }
+  }
+
+  toggleEditReview() {
+    const reviewList = this.closest("li")
+    if (reviewList.children[0].classList.contains("showing")) {
+      reviewList.children[0].classList.remove("showing")
+      reviewList.children[0].classList.add("hiding")
+      reviewList.children[1].classList.add("showing")
+      reviewList.children[1].classList.remove("hiding")
+    } else {
+      reviewList.children[0].classList.add("showing")
+      reviewList.children[0].classList.remove("hiding")
+      reviewList.children[1].classList.remove("showing")
+      reviewList.children[1].classList.add("hiding")
+    }
+  }
+
+  toggleDeleteModal(e) {
+    const modalContainer = document.getElementById("modal-container")
+    const modal = document.getElementById("modal")
+
+    if (modalContainer.classList.contains("hide-modal")) {
+      modalContainer.classList.remove("hide-modal")
+
+      const modalDeleteBtn = document.getElementById("modal-delete-btn")
+      modalDeleteBtn.setAttribute("data-review_id", e.srcElement.dataset.review_id)
+
+      setTimeout(() => {
+        modal.classList.add("show-modal")
+        modal.style.transform = "translateY(-30px)"
+      }, 200)
+
+    } else {
+      modal.classList.remove("show-modal")
+      modal.style.transform = "translateY(30px)"
+      modalContainer.classList.add("hide-modal")
+    }
+  }
+
+  parseReview(e, edit=false) {
+    const id = this.getParameterByName('id')
+    const formValues = Array.from(e.srcElement)
+    let parsedReview = {}
+
+    for (let i=0;i<3;i++) {
+      parsedReview[formValues[i].name] = formValues[i].value
+    }
+    parsedReview["rating"] = parseInt(parsedReview["rating"])
+    edit ? null : parsedReview["restaurant_id"] = parseInt(id)
+    return parsedReview
+  }
+
+  clearReview(e) {
+    const formValues = Array.from(e.srcElement)
+    for (let i=0;i<3;i++) {
+      formValues[i].value = ""
+    }
+  }
+
+  viewRecentReview() {
+    window.scroll({
+      top: document.body.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+
 }
+

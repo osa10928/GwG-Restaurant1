@@ -139,6 +139,11 @@
       display: none !important;
     }
 
+    .not-favorite {
+      color: #eff0f1 !important;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black !important;
+    }
+
   </style>
 </head>
 
@@ -170,6 +175,10 @@
         <select id="cuisines-select" name="cuisines" aria-labelledby="cuisine-select-header">
           <option value="all">All Cuisines</option>
         </select>
+        <div id="filter-favorites-container">
+          <label id="filter-favorites-label" for="favorites">Filter for Favorites:</label>
+          <input aria-labelledby="filter-favorites-label" id="filter-favorites-checkbox" type="checkbox" name="favorites" value="" />
+        </div>
       </div>
     </section>
     <section id=info-container>
@@ -190,6 +199,7 @@
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOj-u6UafWfHSPQljbF__bB9bH4Z-h1wE&libraries=places&callback=initMap"></script>
 
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </body>
 
